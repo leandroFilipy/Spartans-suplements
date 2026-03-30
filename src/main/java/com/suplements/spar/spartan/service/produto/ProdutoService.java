@@ -61,6 +61,9 @@ public class ProdutoService implements IProdutoService{
         produto.setCategoria(produtoRequest.categoria());
         produto.setImagemUrl(produtoRequest.imagemUrl());
         produto.setQuantidadeEstoque(produtoRequest.quantidadeEstoque());
+        produto.setCalorias(produtoRequest.calorias());
+        produto.setProteinas(produtoRequest.proteinas());
+        produto.setCarboidratos(produtoRequest.carboidratos());
 
         Produto produtoSalvo = produtoRepository.save(produto);
 
