@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -18,6 +20,11 @@ public class UsuarioController {
     @GetMapping("/list/{id}")
     public UsuarioResponse listById(@PathVariable long id) {
         return iUsuarioService.listById(id);
+    }
+
+    @GetMapping("/list")
+    public List<UsuarioResponse> listAll() {
+        return iUsuarioService.listAll();
     }
 
     @PostMapping("/register")
