@@ -9,26 +9,43 @@ import com.suplements.spar.spartan.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-public class UsuarioService implements IUsuarioService{
+public class UsuarioService implements IUsuarioService {
 
     private final UsuarioRepository repository;
     private final IUsuarioMapper iUsuarioMapper;
 
     @Override
-    public UsuarioResponse create(UsuarioRequest dto){
+    public UsuarioResponse create(UsuarioRequest dto) {
         Usuario user = iUsuarioMapper.toEntity(dto);
         return iUsuarioMapper.toResponse(repository.save(user));
     }
 
     @Override
-    public UsuarioResponse listById(long id){
+    public UsuarioResponse listById(long id) {
         return iUsuarioMapper.toResponse(repository.findById(id).orElseThrow(() -> new RuntimeException("Id invalido!")));
     }
 
     @Override
-    public UsuarioResponse update(long id, UsuarioRequest dto){
+    public List<UsuarioResponse> listAll() {
+
+        List<Usuario> usuarios = repository.findAll();
+        List<UsuarioResponse> dtos = new ArrayList<>();
+
+        for (Usuario usuario : usuarios) {
+            dtos.add(iUsuarioMapper.toResponse(usuario));
+
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public UsuarioResponse update(long id, UsuarioRequest dto) {
         Usuario user = repository.findById(id).orElseThrow(() -> new RuntimeException("Id invalido!"));
 
         user.setNome(dto.nome());
@@ -43,18 +60,18 @@ public class UsuarioService implements IUsuarioService{
     }
 
     @Override
-    public void delete(long id){
+    public void delete(long id) {
         Usuario user = repository.findById(id).orElseThrow(() -> new RuntimeException("Id invalido!"));
         repository.delete(user);
     }
 
 
     @Override
-    public boolean userExistsByEmailAndPassword(UsuarioLoginRequest usuarioLoginRequest){
+    public boolean userExistsByEmailAndPassword(UsuarioLoginRequest usuarioLoginRequest) {
 
-        if(repository.existsByEmailAndPassword(usuarioLoginRequest.email(), usuarioLoginRequest.password())){
+        if (repository.existsByEmailAndPassword(usuarioLoginRequest.email(), usuarioLoginRequest.password())) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
