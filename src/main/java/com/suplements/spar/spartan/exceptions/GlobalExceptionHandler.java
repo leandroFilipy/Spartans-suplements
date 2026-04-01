@@ -12,13 +12,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
-    @ExceptionHandler({ProdutoNotFoundException.class, CupomNotFoundException.class, UsuarioNotFoundException.class})
-    public ResponseEntity<String> handleNotFound (RuntimeException ex){
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex){
         Map<String, String> erros = new HashMap<>();
@@ -26,8 +19,6 @@ public class GlobalExceptionHandler {
                 erros.put(error.getField(), error.getDefaultMessage()));
         return ResponseEntity.badRequest().body(erros);
     }
-
-
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex){
@@ -40,13 +31,11 @@ public class GlobalExceptionHandler {
                 .body("There was an error because there is no product with this ID");
     }
 
-
     @ExceptionHandler(CupomNotFoundException.class)
     public ResponseEntity<String> couponNotFound(CupomNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("There was an error because there is no coupon with this ID");
     }
-
 
     @ExceptionHandler(UsuarioNotFoundException.class)
     public ResponseEntity<String> userNotFound(UsuarioNotFoundException ex) {
@@ -59,7 +48,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("There was an error because there is no cart with this ID");
     }
-
-
 
 }
