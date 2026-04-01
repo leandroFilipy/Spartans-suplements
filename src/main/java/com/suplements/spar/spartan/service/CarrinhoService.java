@@ -1,6 +1,7 @@
 package com.suplements.spar.spartan.service;
 
 
+import com.suplements.spar.spartan.exceptions.CarrinhoNotFound;
 import com.suplements.spar.spartan.model.Carrinho;
 import com.suplements.spar.spartan.model.ItemCarrinho;
 import com.suplements.spar.spartan.model.Produto;
@@ -26,7 +27,7 @@ public class CarrinhoService {
     public Carrinho createCart(Long id){
         Carrinho carrinho = new Carrinho();
         carrinho.setUsuario(userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Carrinho não encontrado!!!")));
+                .orElseThrow(CarrinhoNotFound::new));
         carrinho.setItens(new ArrayList<>());
         carrinho.setTotal(0.0);
 
@@ -36,7 +37,7 @@ public class CarrinhoService {
     public Carrinho addProduct(Long carrinhoId, long idProduto , int quantidade){
 
         Carrinho carrinho = repository.findById(carrinhoId)
-                .orElseThrow(() -> new RuntimeException("Carrinho não encontrado!!!"));
+                .orElseThrow(CarrinhoNotFound::new);
 
         ItemCarrinho item = new ItemCarrinho();
         item.setCarrinho(carrinho);
@@ -53,7 +54,7 @@ public class CarrinhoService {
 
     public Carrinho removeProduct(Long carrinhoId, Long itemId){
         Carrinho carrinho = repository.findById(carrinhoId)
-                .orElseThrow(() -> new RuntimeException("Carrinho não encontrado"));
+                .orElseThrow(CarrinhoNotFound::new);
 
         for (ItemCarrinho item : carrinho.getItens()) {
             if (item.getId().equals(itemId)) {
