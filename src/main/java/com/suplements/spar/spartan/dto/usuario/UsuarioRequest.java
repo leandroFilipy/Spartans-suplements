@@ -15,7 +15,6 @@ public record UsuarioRequest(
 
         @Email(message = "The email field must be compatible")
         @NotBlank(message = "The email field must not be empty")
-
         String email,
 
         @Length(min = 6, message = "The password field must have at least 6 characteres")

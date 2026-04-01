@@ -3,6 +3,7 @@ package com.suplements.spar.spartan.service.usuarioService;
 import com.suplements.spar.spartan.dto.usuario.UsuarioLoginRequest;
 import com.suplements.spar.spartan.dto.usuario.UsuarioRequest;
 import com.suplements.spar.spartan.dto.usuario.UsuarioResponse;
+import com.suplements.spar.spartan.exceptions.UsuarioNotFoundException;
 import com.suplements.spar.spartan.mapper.usuarioMapper.IUsuarioMapper;
 import com.suplements.spar.spartan.model.Usuario;
 import com.suplements.spar.spartan.repository.UsuarioRepository;
@@ -27,7 +28,7 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public UsuarioResponse listById(long id) {
-        return iUsuarioMapper.toResponse(repository.findById(id).orElseThrow(() -> new RuntimeException("Id invalido!")));
+        return iUsuarioMapper.toResponse(repository.findById(id).orElseThrow(UsuarioNotFoundException::new));
     }
 
     @Override
@@ -46,7 +47,7 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public UsuarioResponse update(long id, UsuarioRequest dto) {
-        Usuario user = repository.findById(id).orElseThrow(() -> new RuntimeException("Id invalido!"));
+        Usuario user = repository.findById(id).orElseThrow(UsuarioNotFoundException::new);
 
         user.setNome(dto.nome());
         user.setEmail(dto.email());
@@ -61,18 +62,16 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public void delete(long id) {
-        Usuario user = repository.findById(id).orElseThrow(() -> new RuntimeException("Id invalido!"));
+        Usuario user = repository.findById(id).orElseThrow(UsuarioNotFoundException::new);
         repository.delete(user);
     }
 
 
     @Override
     public boolean userExistsByEmailAndPassword(UsuarioLoginRequest usuarioLoginRequest) {
-
-        if (repository.existsByEmailAndPassword(usuarioLoginRequest.email(), usuarioLoginRequest.password())) {
-            return true;
-        } else {
-            return false;
-        }
+        return repository.existsByEmailAndPassword(
+                usuarioLoginRequest.email(),
+                usuarioLoginRequest.password()
+        );
     }
 }
