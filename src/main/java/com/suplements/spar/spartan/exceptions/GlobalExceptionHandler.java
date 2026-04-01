@@ -31,13 +31,29 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno no servidor: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("internal server error: " + ex.getMessage());
     }
 
     @ExceptionHandler(ProdutoNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(ProdutoNotFoundException produtoNotFoundException){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe um produto com este id");
+    public ResponseEntity<String> handleNotFound(ProdutoNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("There was an error because there is no product with this ID");
     }
+
+
+    @ExceptionHandler(ProdutoNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(CupomNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("There was an error because there is no coupon with this ID");
+    }
+
+
+    @ExceptionHandler(ProdutoNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(UsuarioNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("There was an error because there is no user with this ID");
+    }
+
 
 
 

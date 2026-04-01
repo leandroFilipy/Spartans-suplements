@@ -2,6 +2,7 @@ package com.suplements.spar.spartan.service.produto;
 
 import com.suplements.spar.spartan.dto.produto.ProdutoRequest;
 import com.suplements.spar.spartan.dto.produto.ProdutoResponse;
+import com.suplements.spar.spartan.exceptions.ProdutoNotFoundException;
 import com.suplements.spar.spartan.mapper.produto.IProdutoMapper;
 import com.suplements.spar.spartan.mapper.produto.ProdutoMapper;
 import com.suplements.spar.spartan.model.Produto;
@@ -43,17 +44,17 @@ public class ProdutoService implements IProdutoService{
     }
 
     @Override
-    public ProdutoResponse listById(long id){
-        Produto produto = produtoRepository.findById(id).orElseThrow(() -> new RuntimeException("There is no product with this ID"));
-        ProdutoResponse produtoResponse = iProdutoMapper.toResponse(produto);
+    public ProdutoResponse listById(long id) {
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(ProdutoNotFoundException::new);
 
-        return produtoResponse;
+        return iProdutoMapper.toResponse(produto);
     }
 
     @Override
     public ProdutoResponse update(long id, ProdutoRequest produtoRequest){
 
-        Produto produto = produtoRepository.findById(id).orElseThrow(() -> new RuntimeException("There is no product with this ID"));
+        Produto produto = produtoRepository.findById(id).orElseThrow(ProdutoNotFoundException::new);
         produto.setNome(produtoRequest.nome());
         produto.setPreco(produtoRequest.preco());
         produto.setDescricao(produtoRequest.descricao());
@@ -74,11 +75,10 @@ public class ProdutoService implements IProdutoService{
 
     @Override
     public void delete(long id){
-        if(produtoRepository.existsById(id)){
-            produtoRepository.deleteById(id);
-        }else {
-            throw new RuntimeException("There is no product with this ID");
-        }
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(ProdutoNotFoundException::new);
+
+        produtoRepository.delete(produto);
     }
 
 }
