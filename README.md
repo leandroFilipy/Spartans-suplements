@@ -133,6 +133,13 @@ Isso permite:
 
 ---
 
+# 📖 Documentação da API
+
+- https://documentacao-spartans-supplements.vercel.app/#visao-geral
+
+---
+
+
 # ▶️ Como Rodar o Projeto
 
 ### 1️⃣ Clonar o repositório
