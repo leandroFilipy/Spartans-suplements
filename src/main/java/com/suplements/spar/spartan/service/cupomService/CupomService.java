@@ -2,8 +2,11 @@ package com.suplements.spar.spartan.service.cupomService;
 
 import com.suplements.spar.spartan.dto.cupom.CupomRequest;
 import com.suplements.spar.spartan.dto.cupom.CupomResponse;
+import com.suplements.spar.spartan.exceptions.CupomNotFoundException;
+import com.suplements.spar.spartan.exceptions.ProdutoNotFoundException;
 import com.suplements.spar.spartan.mapper.cupomMapper.ICupomMapper;
 import com.suplements.spar.spartan.model.Cupom;
+import com.suplements.spar.spartan.model.Produto;
 import com.suplements.spar.spartan.repository.CupomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,7 +47,7 @@ public class CupomService implements ICupomService{
     @Override
     public CupomResponse listById(long id){
 
-        Cupom cupom = cupomRepository.findById(id).orElseThrow(() -> new RuntimeException("There is no coupon which ID is " + id));
+        Cupom cupom = cupomRepository.findById(id).orElseThrow(CupomNotFoundException::new);
         CupomResponse cupomResponse = iCupomMapper.toResponse(cupom);
 
         return cupomResponse;
@@ -53,7 +56,7 @@ public class CupomService implements ICupomService{
     @Override
     public CupomResponse update (long id, CupomRequest cupomRequest){
 
-        Cupom cupom = cupomRepository.findById(id).orElseThrow(() -> new RuntimeException("There is no coupon which ID is " + id));
+        Cupom cupom = cupomRepository.findById(id).orElseThrow(CupomNotFoundException::new);
         cupom.setCodigo(cupomRequest.codigo());
         cupom.setPorcentagemDesconto(cupomRequest.porcentagemDesconto());
         cupom.setAtivo(cupomRequest.ativo());
@@ -65,10 +68,9 @@ public class CupomService implements ICupomService{
 
     @Override
     public void delete(long id){
-        if(cupomRepository.existsById(id)){
-            cupomRepository.deleteById(id);
-        }else {
-            new RuntimeException("There is no coupon which ID is " + id);
-        }
+        Cupom cupom = cupomRepository.findById(id)
+                .orElseThrow(ProdutoNotFoundException::new);
+
+        cupomRepository.delete(cupom);
     }
 }
