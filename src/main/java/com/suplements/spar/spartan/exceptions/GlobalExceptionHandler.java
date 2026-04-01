@@ -35,27 +35,27 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ProdutoNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(ProdutoNotFoundException ex) {
+    public ResponseEntity<String> productNotFound(ProdutoNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("There was an error because there is no product with this ID");
     }
 
 
     @ExceptionHandler(CupomNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(CupomNotFoundException ex) {
+    public ResponseEntity<String> couponNotFound(CupomNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("There was an error because there is no coupon with this ID");
     }
 
 
     @ExceptionHandler(UsuarioNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(UsuarioNotFoundException ex) {
+    public ResponseEntity<String> userNotFound(UsuarioNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("There was an error because there is no user with this ID");
     }
 
     @ExceptionHandler(CarrinhoNotFound.class)
-    public ResponseEntity<String> handleNotFound(CarrinhoNotFound ex) {
+    public ResponseEntity<String> cartNotFound(CarrinhoNotFound ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("There was an error because there is no cart with this ID");
     }
